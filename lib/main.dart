@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:video_player/video_player.dart';
 
 void main() {
   runApp(const MyApp());
@@ -35,16 +36,41 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
   int currentPageIndex = 0;
+  late VideoPlayerController _controller;
+  late Future<void> _initializeVideoPlayerFuture;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = VideoPlayerController.networkUrl(
+      Uri.parse(
+        'https://www.ayura-co.jp/wp-content/uploads/2021/09/Kavinsky-Nightcall-Drive-Original-Movie-Soundtrack-Official-Audio.mp4?_=1',
+      ),
+    );
+
+    _initializeVideoPlayerFuture = _controller.initialize();
+    _controller.setLooping(true);
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _controller.dispose();
+  }
 
   void _incrementCounter() {
     setState(() {
-      _counter++;
+      if(currentPageIndex == 0) {
+        _counter++;
+      }
     });
   }
 
   void _decrementCounter() {
     setState(() {
-      _counter--;
+      if(currentPageIndex == 0) {
+        _counter--;
+      }
     });
   }
 
@@ -91,7 +117,25 @@ class _MyHomePageState extends State<MyHomePage> {
           color: Colors.green,
           width: double.infinity,
           height: double.infinity,
-          child: const Center(child: Text('Page suivante')),
+          child: FutureBuilder(
+            future: _initializeVideoPlayerFuture,
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.done) {
+                return SizedBox(
+                  width: 300,
+                  height: 200,
+                  child: AspectRatio(
+                    aspectRatio: _controller.value.aspectRatio,
+                    child: VideoPlayer(_controller),
+                  ),
+                );
+              } else {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
+            },
+          ),
         ),
         Container(
           color: Colors.blue,
@@ -117,6 +161,26 @@ class _MyHomePageState extends State<MyHomePage> {
             child: FloatingActionButton(
               onPressed: _incrementCounter,
               child: const Icon(Icons.add),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(left: 31),
+            child: Align(
+              alignment: Alignment.bottomCenter,
+              child: FloatingActionButton(
+                onPressed: () {
+                  setState(() {
+                    if(currentPageIndex == 1) {
+                      _controller.value.isPlaying
+                          ? _controller.pause()
+                          : _controller.play();
+                    }
+                  });
+                },
+                child: Icon(
+                  _controller.value.isPlaying ? Icons.pause : Icons.play_arrow,
+                ),
+              ),
             ),
           ),
         ],
