@@ -14,7 +14,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.greenAccent),
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         primarySwatch: Colors.red,
         useMaterial3: true,
       ),
@@ -56,50 +56,59 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text(widget.title),
       ),
       body: <Widget>[
-        Container(
-          child: ListView(
-            children: <Widget>[
-              Image.asset(
-                'images/image.jpg',
-                width: 200,
-                height: 200,
-                fit: BoxFit.scaleDown,
-              ),
-              Image.network(
-                'https://www.powertrafic.fr/wp-content/uploads/2023/04/image-ia-exemple.png',
-                width: 200,
-                height: 200,
-                fit: BoxFit.scaleDown,
-              ),
-              Container(
-                child: const Text(
+        ListView(
+          children: [
+            Image.asset(
+              'images/image.jpg',
+              width: 200,
+              height: 200,
+              fit: BoxFit.scaleDown,
+            ),
+            Image.network(
+              'https://www.powertrafic.fr/wp-content/uploads/2023/04/image-ia-exemple.png',
+              width: 200,
+              height: 200,
+              fit: BoxFit.scaleDown,
+            ),
+            Column(
+              children: [
+                const Text(
                   'Nombre:',
                   style: TextStyle(
                     color: Colors.red,
                     fontSize: 26,
                   ),
                 ),
-              ),
-              Container(
-                child: Text(
+                Text(
                   '$_counter',
                   style: Theme.of(context).textTheme.headlineMedium,
                 ),
-              ),
-            ],
-          ),
+              ],
+            )
+          ],
+        ),
+        Container(
+          color: Colors.green,
+          width: double.infinity,
+          height: double.infinity,
+          child: const Center(child: Text('Page suivante')),
+        ),
+        Container(
+          color: Colors.blue,
+          width: double.infinity,
+          height: double.infinity,
+          child: const Center(child: Text('Paramètres')),
         ),
       ][currentPageIndex],
-
       floatingActionButton: Stack(
         children: <Widget>[
           Padding(
-            padding: EdgeInsets.only(left: 31),
+            padding: const EdgeInsets.only(left: 31),
             child: Align(
               alignment: Alignment.bottomLeft,
               child: FloatingActionButton(
                 onPressed: _decrementCounter,
-                child: Icon(Icons.remove),
+                child: const Icon(Icons.remove),
               ),
             ),
           ),
@@ -107,7 +116,7 @@ class _MyHomePageState extends State<MyHomePage> {
             alignment: Alignment.bottomRight,
             child: FloatingActionButton(
               onPressed: _incrementCounter,
-              child: Icon(Icons.add),
+              child: const Icon(Icons.add),
             ),
           ),
         ],
