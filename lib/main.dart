@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
+import 'dart:math';
 
 void main() {
   runApp(const MyApp());
@@ -36,8 +37,10 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
   int currentPageIndex = 0;
+  int maxValue = 1;
   late VideoPlayerController _controller;
   late Future<void> _initializeVideoPlayerFuture;
+  final myController = TextEditingController();
 
   @override
   void initState() {
@@ -56,11 +59,12 @@ class _MyHomePageState extends State<MyHomePage> {
   void dispose() {
     super.dispose();
     _controller.dispose();
+    myController.dispose();
   }
 
   void _incrementCounter() {
     setState(() {
-      if(currentPageIndex == 0) {
+      if (currentPageIndex == 0) {
         _counter++;
       }
     });
@@ -68,7 +72,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void _decrementCounter() {
     setState(() {
-      if(currentPageIndex == 0) {
+      if (currentPageIndex == 0) {
         _counter--;
       }
     });
@@ -98,6 +102,24 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             Column(
               children: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: TextField(
+                    controller: myController,
+                    decoration: const InputDecoration(
+                        hintText: 'Nombre max',
+                        prefixIcon: Icon(Icons.calculate),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            width: 1.5,
+                            color: Colors.deepPurple,
+                            strokeAlign: 50,
+                            style: BorderStyle.solid,
+                          ),
+                        )),
+                        keyboardType: TextInputType.number,
+                  ),
+                ),
                 const Text(
                   'Nombre:',
                   style: TextStyle(
@@ -109,6 +131,21 @@ class _MyHomePageState extends State<MyHomePage> {
                   '$_counter',
                   style: Theme.of(context).textTheme.headlineMedium,
                 ),
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 100),
+                  child: ElevatedButton(
+                    onPressed: () {
+                      setState(() {
+                        int random = 1;
+                        if(myController.text != '' && int.parse(myController.text) >= 1) {
+                          random = Random().nextInt(int.parse(myController.text));
+                        }
+                        _counter = random;
+                      });
+                    },
+                    child: const Text('Générer un nombre aléatoire'),
+                  ),
+                )
               ],
             )
           ],
@@ -170,7 +207,7 @@ class _MyHomePageState extends State<MyHomePage> {
               child: FloatingActionButton(
                 onPressed: () {
                   setState(() {
-                    if(currentPageIndex == 1) {
+                    if (currentPageIndex == 1) {
                       _controller.value.isPlaying
                           ? _controller.pause()
                           : _controller.play();
