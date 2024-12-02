@@ -117,7 +117,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             style: BorderStyle.solid,
                           ),
                         )),
-                        keyboardType: TextInputType.number,
+                    keyboardType: TextInputType.number,
                   ),
                 ),
                 const Text(
@@ -137,8 +137,10 @@ class _MyHomePageState extends State<MyHomePage> {
                     onPressed: () {
                       setState(() {
                         int random = 1;
-                        if(myController.text != '' && int.parse(myController.text) >= 1) {
-                          random = Random().nextInt(int.parse(myController.text));
+                        if (myController.text != '' &&
+                            int.parse(myController.text) >= 1) {
+                          random =
+                              Random().nextInt(int.parse(myController.text));
                         }
                         _counter = random;
                       });
@@ -158,12 +160,14 @@ class _MyHomePageState extends State<MyHomePage> {
             future: _initializeVideoPlayerFuture,
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.done) {
-                return SizedBox(
-                  width: 300,
-                  height: 200,
-                  child: AspectRatio(
-                    aspectRatio: _controller.value.aspectRatio,
-                    child: VideoPlayer(_controller),
+                return Center(
+                  child: SizedBox(
+                    width: 300,
+                    height: 200,
+                    child: AspectRatio(
+                      aspectRatio: _controller.value.aspectRatio,
+                      child: VideoPlayer(_controller),
+                    ),
                   ),
                 );
               } else {
